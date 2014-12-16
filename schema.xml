@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="notizen" defaultIdMethod="native">
+	<table name="person" phpName="Person">
+		<column name="personName" type="varchar" size="32" />
+		<column name="beschreibung" type="varchar" size="128" />
+		<column name="person_id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+	</table>
+	<table name="notiz" phpName="Notiz">
+		<column name="betreff" type="varchar" size="256" required="true" />
+		<column name="text" type="varchar" size="longvarchar" required="true" />
+		<column name="datum" type="date" required="true" />
+		<column name="besitzer" type="varchar" size="32" required="true"/>
+		<column name="projekt" type="varchar" size="64" />
+		<column name="notiz_id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+		<column name="fk_id" type="integer" required="true" />
+		<foreign-key foreignTable="person" phpName="Person" refPhpName="notizen">
+			<reference local="fk_id" foreign="person_id" />
+		</foreign-key>
+	</table>
+	<table name="projekt" phpName="Projekt">
+		<column name="projektname" type="varchar" size="64" />
+		<column name="startdate" type="date" />
+		<column name="enddate" type="date" />
+		<column name="projekt_id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+	</table>
+	<table name="rezept" phpName="Rezept">
+		<column name="rezept_id" type="integer" required="true" primaryKey="true" />
+	</table>
+	<table name="rezeptverwaltung" phpName="Rezeptverwaltung">
+		<column name="fkrezept_id" type="integer" required="true"	/>
+		<column name="fknotiz_id" type="integer" required="true" />
+		<foreign-key foreignTable="notiz" phpName="Notiz" refPhpName="notizen">
+			<reference local="fknotiz_id" foreign="notiz_id"/>
+		</foreign-key>
+		<foreign-key foreignTable="rezept" phpName="Rezept" refPhpName="notizen">
+			<reference local="fkrezept_id" foreign="rezept_id"/>
+		</foreign-key>
+	</table>
+	<table name="teilnehmen" phpName="Teilnehmen">
+		<column name="pid" type="integer" required="true" />
+		<column name="tid" type="integer" required="true" />
+		<foreign-key foreignTable="person" phpName="Person" refPhpName="notizen">
+			<reference local="pid" foreign="person_id"/>
+		</foreign-key>
+		<foreign-key foreignTable="projekt" phpName="Projekt" refPhpName="notizen">
+			<reference local="tid" foreign="projekt_id"/>
+		</foreign-key>
+	</table>
+	<table name="toDo" phpName="ToDo">
+		<column name="toDo_id" type="integer" required="true"/>
+		<column name="status" type="varchar" size="16" required="true" />
+		<column name="priority" type="integer" required="true" />
+		<foreign-key foreignTable="notiz" phpName="Notiz" refPhpName="notizen">
+			<reference local="toDo_id" foreign="notiz_id"/>
+		</foreign-key>
+	</table>
+</database>
